@@ -10,12 +10,9 @@ public class PlayerScore : MonoBehaviour
     int score = 0;
     public TextMeshProUGUI scoreText;
 
-    String currentName = "";
+    // String currentName = "";
     TextMeshProUGUI nameInput;
     Button newGameButton;
-
-    List<String> names = new List<String>();
-    List<int> scores = new List<int>();
 
     void Start()
     {

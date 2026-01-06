@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // escapeMenu.SetActive(false);
+        escapeMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -50,13 +50,13 @@ public class PlayerController : MonoBehaviour
                     grounded = false;
                 }
 
-                /* if(Input.GetKeyDown(KeyCode.Escape) && escapeMenu.gameObject.activeSelf)
+                if(Input.GetKeyDown(KeyCode.Escape) && escapeMenu.gameObject.activeSelf)
                 {
                     escapeMenu.gameObject.SetActive(false);
                 } else if (Input.GetKeyDown(KeyCode.Escape) && !escapeMenu.gameObject.activeSelf)
                 {
                     escapeMenu.gameObject.SetActive(true);
-                } */
+                }
             }
         }
     }
