@@ -6,16 +6,25 @@ public class PlayerController : MonoBehaviour
 {
     bool alive = true;
 
-    int speed = 5;
+    public int speed = 5;
     public Rigidbody rb;
     Boolean grounded;
 
     public GameObject escapeMenu;
 
+    public PlayerController playerController;
+    public PlayerScore playerScore;
+    public SpawnPickup spawnPickup;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        escapeMenu.SetActive(false);
+        escapeMenu.SetActive(true);
+
+        playerController = FindFirstObjectByType<PlayerController>();
+        playerScore = FindFirstObjectByType<PlayerScore>();
+        spawnPickup = FindFirstObjectByType<SpawnPickup>();
     }
 
     // Update is called once per frame
@@ -24,30 +33,33 @@ public class PlayerController : MonoBehaviour
         {
             if (alive)
             {
-                if(Input.GetKey(KeyCode.W))
+                if (!escapeMenu.gameObject.activeSelf)
                 {
-                    transform.Translate(Vector3.forward * Time.deltaTime * speed);
-                }
-                
-                if(Input.GetKey(KeyCode.S))
-                {
-                    transform.Translate(Vector3.back * Time.deltaTime * speed);
-                }
-                
-                if(Input.GetKey(KeyCode.A))
-                {
-                    transform.Translate(Vector3.left * Time.deltaTime * speed);
-                }
-                
-                if(Input.GetKey(KeyCode.D))
-                {
-                    transform.Translate(Vector3.right * Time.deltaTime * speed);
-                }
+                    if(Input.GetKey(KeyCode.W))
+                    {
+                        transform.Translate(Vector3.forward * Time.deltaTime * speed);
+                    }
+                    
+                    if(Input.GetKey(KeyCode.S))
+                    {
+                        transform.Translate(Vector3.back * Time.deltaTime * speed);
+                    }
+                    
+                    if(Input.GetKey(KeyCode.A))
+                    {
+                        transform.Translate(Vector3.left * Time.deltaTime * speed);
+                    }
+                    
+                    if(Input.GetKey(KeyCode.D))
+                    {
+                        transform.Translate(Vector3.right * Time.deltaTime * speed);
+                    }
 
-                if(Input.GetKeyDown(KeyCode.Space) && grounded)
-                {
-                    rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
-                    grounded = false;
+                    if(Input.GetKeyDown(KeyCode.Space) && grounded)
+                    {
+                        rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
+                        grounded = false;
+                    }
                 }
 
                 if(Input.GetKeyDown(KeyCode.Escape) && escapeMenu.gameObject.activeSelf)
@@ -59,6 +71,16 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void Reset()
+    {
+        playerScore.score = 0;
+        playerScore.scoreText.text = "Score: " + "0";
+        playerController.transform.position = new Vector3(0, 1, 33);
+        playerController.speed = 5;
+
+        spawnPickup.SpawnNewPickups();
     }
 
     private void OnCollisionEnter(Collision collision)

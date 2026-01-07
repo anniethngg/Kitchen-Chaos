@@ -7,8 +7,11 @@ using UnityEngine.UI;
 
 public class PlayerScore : MonoBehaviour
 {
-    int score = 0;
+    public int score = 0;
     public TextMeshProUGUI scoreText;
+
+    GUIController guiController;
+    PlayerController playerController;
 
     // String currentName = "";
     TextMeshProUGUI nameInput;
@@ -17,6 +20,9 @@ public class PlayerScore : MonoBehaviour
     void Start()
     {
         scoreText.text = "Score: " + score.ToString();
+
+        guiController = FindFirstObjectByType<GUIController>();
+        playerController = FindFirstObjectByType<PlayerController>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -31,8 +37,13 @@ public class PlayerScore : MonoBehaviour
         {
             // Save the score to scores.csv
             string filePath = "Assets/Scripts/Player/scores.csv";
-            File.WriteAllText(filePath, score.ToString());
+            string text = File.ReadAllText(filePath);
+
+            File.WriteAllText(filePath, text + Environment.NewLine + guiController.username + "," + score.ToString());
             Debug.Log("Score saved to " + filePath);
+
+            playerController.Reset();
+            playerController.escapeMenu.SetActive(true);
         }
     }
 }
