@@ -16,9 +16,7 @@ public class PlayerScore : MonoBehaviour
 
     GUIController guiController;
     PlayerController playerController;
-
-    TextMeshProUGUI nameInput;
-    Button newGameButton;
+    GameController gameController;
 
     void Start()
     {
@@ -26,6 +24,7 @@ public class PlayerScore : MonoBehaviour
 
         guiController = FindFirstObjectByType<GUIController>();
         playerController = FindFirstObjectByType<PlayerController>();
+        gameController = FindFirstObjectByType<GameController>();
     }
 
     public List<String> getScoreName()
@@ -79,17 +78,10 @@ public class PlayerScore : MonoBehaviour
 
         if (other.gameObject.CompareTag("Finish"))
         {
-            // Save the score to scores.csv
-            string filePath = "Assets/Scripts/Player/scores.csv";
-            string text = File.ReadAllText(filePath);
-
-            File.WriteAllText(filePath, text + Environment.NewLine + guiController.username + "," + score.ToString());
-            Debug.Log("Score saved to " + filePath);
-
             guiController.UpdateScores();
-            playerController.Reset();
-            playerController.escapeMenu.SetActive(true);
-            playerController.HUD.SetActive(false);
+            guiController.WriteScores();
+            
+            gameController.Reset();
         }
     }
 }

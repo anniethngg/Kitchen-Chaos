@@ -6,24 +6,21 @@ public class PlayerController : MonoBehaviour
 {
     bool alive = true;
 
+    // Movement
     public int speed = 5;
     public Rigidbody rb;
     Boolean grounded;
 
+    // GUI Elements
     public GameObject escapeMenu;
     public GameObject gameOverMenu;
     public GameObject HUD;
 
-    PlayerController playerController;
-    PlayerScore playerScore;
-    SpawnPickup spawnPickup;
+    // External classes
     GUIController guiController;
 
     void Start()
     {
-        playerController = FindFirstObjectByType<PlayerController>();
-        playerScore = FindFirstObjectByType<PlayerScore>();
-        spawnPickup = FindFirstObjectByType<SpawnPickup>();
         guiController = FindFirstObjectByType<GUIController>();
         
         escapeMenu.SetActive(true);
@@ -65,30 +62,8 @@ public class PlayerController : MonoBehaviour
                         grounded = false;
                     }
                 }
-
-                if(Input.GetKeyDown(KeyCode.Escape) && escapeMenu.gameObject.activeSelf)
-                {
-                    escapeMenu.gameObject.SetActive(false);
-                    HUD.SetActive(true);
-                    guiController.UpdateScores();
-                } else if (Input.GetKeyDown(KeyCode.Escape) && !escapeMenu.gameObject.activeSelf)
-                {
-                    escapeMenu.gameObject.SetActive(true);
-                    HUD.SetActive(false);
-                    guiController.UpdateScores();
-                }
             }
         }
-    }
-
-    public void Reset()
-    {
-        playerScore.score = 0;
-        playerScore.scoreText.text = "Score: " + "0";
-        playerController.transform.position = new Vector3(0, 1, 33);
-        playerController.speed = 5;
-
-        spawnPickup.SpawnNewPickups();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -102,9 +77,7 @@ public class PlayerController : MonoBehaviour
         {
             alive = false;
             GetComponent<MeshRenderer>().enabled = false;
-            escapeMenu.SetActive(false);
-            gameOverMenu.SetActive(true);
-            HUD.SetActive(false);
+            guiController.Death();
         }
     }
 

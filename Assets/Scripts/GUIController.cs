@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,15 +8,21 @@ using UnityEngine.UI;
 
 public class GUIController : MonoBehaviour
 {
-    Button newGameButton;
-    Button closeButton;
     public TMP_InputField nameInput;
     public TextMeshProUGUI highScoreTextEscape;
     public TextMeshProUGUI highScoreTextGameOver;
 
+    public GameObject escapeMenu;
+    public GameObject HUD;
+    public GameObject gameOverMenu;
+
     public String username;
+    bool updated = false;
+
+    // External classes
     PlayerController playerController;
     PlayerScore playerScore;
+    GameController gameController;
 
     List<String> names = new List<String>();
     List<String> scores = new List<String>();
@@ -28,10 +35,44 @@ public class GUIController : MonoBehaviour
         UpdateScores();
     }
 
+    public void Update()
+    {
+        if (username != "" && username != null)
+        {
+            if(Input.GetKeyDown(KeyCode.Escape) && escapeMenu.gameObject.activeSelf)
+            {
+                escapeMenu.gameObject.SetActive(false);
+                HUD.SetActive(true);
+
+                UpdateScores();
+
+                if (!updated)
+                {
+                    WriteScores();
+                    updated = true;
+                }
+            } else if (Input.GetKeyDown(KeyCode.Escape) && !escapeMenu.gameObject.activeSelf)
+            {
+                escapeMenu.gameObject.SetActive(true);
+                HUD.SetActive(false);
+
+                UpdateScores();
+
+                if (!updated)
+                {
+                    WriteScores();
+                    updated = true;
+                }
+            }
+        }
+    }
+
     public void SaveName()
     {
         username = nameInput.text;
         nameInput.text = "";
+
+        updated = true;
 
         Debug.Log("Name saved: " + username);
     }
@@ -40,23 +81,28 @@ public class GUIController : MonoBehaviour
     {
         if (username != "" && username != null)
         {
-            playerController.escapeMenu.SetActive(false);
-            playerController.HUD.SetActive(true);
-            playerController.Reset();
+            escapeMenu.SetActive(false);
+            HUD.SetActive(true);
+            gameController.Reset();
         }
     }
 
     public void TryAgain()
     {
-        playerController.gameOverMenu.SetActive(false);
-        playerController.escapeMenu.SetActive(true);
-        playerController.Reset();
+        gameOverMenu.SetActive(false);
+        escapeMenu.SetActive(true);
+        gameController.Reset();
+    }
+
+    public void Death()
+    {
+        escapeMenu.SetActive(false);
+        gameOverMenu.SetActive(true);
+        HUD.SetActive(false);
     }
 
     public void UpdateScores()
     {
-        String t = "";
-
         names.Clear();
         scores.Clear();
 
@@ -85,12 +131,26 @@ public class GUIController : MonoBehaviour
             }
         }
 
+        String t = "";
+
         for (int i = 0; i < 5; i++)
         {
             t += i + 1 + ". " + names[i] + ": " + scores[i] + "\n";
         }
-        
+
         highScoreTextEscape.text = "Highscores \n \n" + t;
         highScoreTextGameOver.text = "Highscores \n \n" + t;
+    }
+
+    public void WriteScores()
+    {
+        // Save the score to scores.csv
+        string filePath = "Assets/Scripts/Player/scores.csv";
+        string text = File.ReadAllText(filePath);
+
+        File.WriteAllText(filePath, text + Environment.NewLine + username + "," + playerScore.score.ToString());
+
+        escapeMenu.SetActive(true);
+        HUD.SetActive(false);
     }
 }

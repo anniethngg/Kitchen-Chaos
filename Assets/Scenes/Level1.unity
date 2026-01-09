@@ -3236,6 +3236,7 @@ GameObject:
   - component: {fileID: 1573301705}
   - component: {fileID: 1573301704}
   - component: {fileID: 1573301706}
+  - component: {fileID: 1573301707}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -3287,7 +3288,22 @@ MonoBehaviour:
   nameInput: {fileID: 1741177430}
   highScoreTextEscape: {fileID: 99639364}
   highScoreTextGameOver: {fileID: 899011111}
+  escapeMenu: {fileID: 838963877}
+  HUD: {fileID: 846196440}
+  gameOverMenu: {fileID: 519019841}
   username: 
+--- !u!114 &1573301707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573301703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf39de9ece5b91140981469fb490fae0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameController
 --- !u!1 &1643477572
 GameObject:
   m_ObjectHideFlags: 0
